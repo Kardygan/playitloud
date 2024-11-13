@@ -8,6 +8,6 @@ namespace PlayItLoud.API.Repositories
         Task<Album?> GetByIdAsync(int id);
         void Add(Album album);
         void Update(Album album);
-        void Delete(Album album);
+        void Remove(Album album);
     }
 }
