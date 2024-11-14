@@ -1,6 +1,6 @@
 ﻿using PlayItLoud.API.Models;
 
-namespace PlayItLoud.API.Repositories
+namespace PlayItLoud.API.Repositories.Interfaces
 {
     public interface IArtistRepository
     {

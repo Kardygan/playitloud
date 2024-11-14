@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PlayItLoud.API.Data;
 using PlayItLoud.API.Models;
+using PlayItLoud.API.Repositories.Interfaces;
 
 namespace PlayItLoud.API.Repositories
 {
