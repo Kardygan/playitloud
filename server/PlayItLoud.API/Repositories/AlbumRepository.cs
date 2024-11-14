@@ -9,7 +9,7 @@ namespace PlayItLoud.API.Repositories
     {
         private readonly MusicDbContext _context;
 
-        private AlbumRepository(MusicDbContext context)
+        public AlbumRepository(MusicDbContext context)
         {
             _context = context;
         }
