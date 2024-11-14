@@ -17,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\" />
     <Folder Include="wwwroot\images\albums\" />
     <Folder Include="wwwroot\images\artists\" />
   </ItemGroup>
