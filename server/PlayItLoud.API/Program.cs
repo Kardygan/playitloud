@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PlayItLoud.API.Repositories;
 using PlayItLoud.API.Repositories.Interfaces;
 using PlayItLoud.API.Services.Interfaces;
+using PlayItLoud.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,10 @@ builder.Services.AddScoped<ITrackRepository, TrackRepository>();
 #endregion
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+# region Services
+builder.Services.AddScoped<IAlbumService, AlbumService>();
+#endregion
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
