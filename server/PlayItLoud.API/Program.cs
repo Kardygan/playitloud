@@ -2,7 +2,7 @@ using PlayItLoud.API.Data;
 using Microsoft.EntityFrameworkCore;
 using PlayItLoud.API.Repositories;
 using PlayItLoud.API.Repositories.Interfaces;
-using PlayItLoud.API.Services;
+using PlayItLoud.API.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 

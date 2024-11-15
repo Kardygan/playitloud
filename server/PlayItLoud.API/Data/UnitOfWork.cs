@@ -1,4 +1,4 @@
-﻿using PlayItLoud.API.Services;
+﻿using PlayItLoud.API.Services.Interfaces;
 
 namespace PlayItLoud.API.Data
 {
