@@ -11,7 +11,7 @@ namespace PlayItLoud.API.Models
         [StringLength(50)]
         [RegularExpression(@"^(?!\s*$).*", ErrorMessage = "Name cannot contain only whitespaces.")]
         public string Name { get; set; }
-        public string Picture { get; set; } = "/images/default.png";  // Default picture.
+        public string Picture { get; set; } = "/images/default.png";
         [RegularExpression(@"^(?!\s*$).*", ErrorMessage = "Alias cannot contain only whitespaces.")]
         public string? Alias { get; set; }
         [Required]
