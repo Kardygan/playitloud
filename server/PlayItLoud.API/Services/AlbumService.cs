@@ -43,8 +43,8 @@ namespace PlayItLoud.API.Services
                 Label = string.IsNullOrWhiteSpace(albumDto.Label) ? null : albumDto.Label
             };
 
-            await AddArtistsToAlbum(albumDto, album);
-            await AddGenresToAlbum(albumDto, album);
+            await AddArtistsToAlbumAsync(albumDto, album);
+            await AddGenresToAlbumAsync(albumDto, album);
             AddTracksToAlbum(albumDto, album);
 
             _albumRepository.Add(album);
@@ -63,10 +63,10 @@ namespace PlayItLoud.API.Services
             existingAlbum.Label = string.IsNullOrWhiteSpace(albumDto.Label) ? null : albumDto.Label;
 
             existingAlbum.Artists.Clear();
-            await AddArtistsToAlbum(albumDto, existingAlbum);
+            await AddArtistsToAlbumAsync(albumDto, existingAlbum);
 
             existingAlbum.Genres.Clear();
-            await AddGenresToAlbum(albumDto, existingAlbum);
+            await AddGenresToAlbumAsync(albumDto, existingAlbum);
 
             existingAlbum.Tracks.Clear();
             AddTracksToAlbum(albumDto, existingAlbum);
@@ -90,7 +90,7 @@ namespace PlayItLoud.API.Services
             albumDto.GenreIds = albumDto.GenreIds.Distinct().ToList();
         }
 
-        private async Task AddArtistsToAlbum(AlbumDTO albumDto, Album album)
+        private async Task AddArtistsToAlbumAsync(AlbumDTO albumDto, Album album)
         {
             foreach (var artistId in albumDto.ArtistIds)
             {
@@ -99,7 +99,7 @@ namespace PlayItLoud.API.Services
             }
         }
 
-        private async Task AddGenresToAlbum(AlbumDTO albumDto, Album album)
+        private async Task AddGenresToAlbumAsync(AlbumDTO albumDto, Album album)
         {
             foreach (var genreId in albumDto.GenreIds)
             {
