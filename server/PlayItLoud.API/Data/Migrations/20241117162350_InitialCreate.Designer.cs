@@ -12,8 +12,8 @@ using PlayItLoud.API.Data;
 namespace PlayItLoud.API.Migrations
 {
     [DbContext(typeof(MusicDbContext))]
-    [Migration("20241112231827_RenameTables")]
-    partial class RenameTables
+    [Migration("20241117162350_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,30 +27,30 @@ namespace PlayItLoud.API.Migrations
 
             modelBuilder.Entity("AlbumArtist", b =>
                 {
-                    b.Property<int>("AlbumsId")
+                    b.Property<int>("AlbumId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ArtistsId")
+                    b.Property<int>("ArtistId")
                         .HasColumnType("int");
 
-                    b.HasKey("AlbumsId", "ArtistsId");
+                    b.HasKey("AlbumId", "ArtistId");
 
-                    b.HasIndex("ArtistsId");
+                    b.HasIndex("ArtistId");
 
                     b.ToTable("AlbumArtist");
                 });
 
             modelBuilder.Entity("AlbumGenre", b =>
                 {
-                    b.Property<int>("AlbumsId")
+                    b.Property<int>("AlbumId")
                         .HasColumnType("int");
 
-                    b.Property<int>("GenresId")
+                    b.Property<int>("GenreId")
                         .HasColumnType("int");
 
-                    b.HasKey("AlbumsId", "GenresId");
+                    b.HasKey("AlbumId", "GenreId");
 
-                    b.HasIndex("GenresId");
+                    b.HasIndex("GenreId");
 
                     b.ToTable("AlbumGenre");
                 });
@@ -171,13 +171,13 @@ namespace PlayItLoud.API.Migrations
                 {
                     b.HasOne("PlayItLoud.API.Models.Album", null)
                         .WithMany()
-                        .HasForeignKey("AlbumsId")
+                        .HasForeignKey("AlbumId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PlayItLoud.API.Models.Artist", null)
                         .WithMany()
-                        .HasForeignKey("ArtistsId")
+                        .HasForeignKey("ArtistId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -186,13 +186,13 @@ namespace PlayItLoud.API.Migrations
                 {
                     b.HasOne("PlayItLoud.API.Models.Album", null)
                         .WithMany()
-                        .HasForeignKey("AlbumsId")
+                        .HasForeignKey("AlbumId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PlayItLoud.API.Models.Genre", null)
                         .WithMany()
-                        .HasForeignKey("GenresId")
+                        .HasForeignKey("GenreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

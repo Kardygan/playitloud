@@ -12,7 +12,7 @@ namespace PlayItLoud.API.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Albums",
+                name: "Album",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -25,11 +25,11 @@ namespace PlayItLoud.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Albums", x => x.Id);
+                    table.PrimaryKey("PK_Album", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Artists",
+                name: "Artist",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -43,11 +43,11 @@ namespace PlayItLoud.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Artists", x => x.Id);
+                    table.PrimaryKey("PK_Artist", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Genres",
+                name: "Genre",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -56,11 +56,11 @@ namespace PlayItLoud.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Genres", x => x.Id);
+                    table.PrimaryKey("PK_Genre", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Tracks",
+                name: "Track",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -72,11 +72,11 @@ namespace PlayItLoud.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tracks", x => x.Id);
+                    table.PrimaryKey("PK_Track", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Tracks_Albums_AlbumId",
+                        name: "FK_Track_Album_AlbumId",
                         column: x => x.AlbumId,
-                        principalTable: "Albums",
+                        principalTable: "Album",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -85,22 +85,22 @@ namespace PlayItLoud.API.Migrations
                 name: "AlbumArtist",
                 columns: table => new
                 {
-                    AlbumsId = table.Column<int>(type: "int", nullable: false),
-                    ArtistsId = table.Column<int>(type: "int", nullable: false)
+                    AlbumId = table.Column<int>(type: "int", nullable: false),
+                    ArtistId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AlbumArtist", x => new { x.AlbumsId, x.ArtistsId });
+                    table.PrimaryKey("PK_AlbumArtist", x => new { x.AlbumId, x.ArtistId });
                     table.ForeignKey(
-                        name: "FK_AlbumArtist_Albums_AlbumsId",
-                        column: x => x.AlbumsId,
-                        principalTable: "Albums",
+                        name: "FK_AlbumArtist_Album_AlbumId",
+                        column: x => x.AlbumId,
+                        principalTable: "Album",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_AlbumArtist_Artists_ArtistsId",
-                        column: x => x.ArtistsId,
-                        principalTable: "Artists",
+                        name: "FK_AlbumArtist_Artist_ArtistId",
+                        column: x => x.ArtistId,
+                        principalTable: "Artist",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -109,39 +109,39 @@ namespace PlayItLoud.API.Migrations
                 name: "AlbumGenre",
                 columns: table => new
                 {
-                    AlbumsId = table.Column<int>(type: "int", nullable: false),
-                    GenresId = table.Column<int>(type: "int", nullable: false)
+                    AlbumId = table.Column<int>(type: "int", nullable: false),
+                    GenreId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AlbumGenre", x => new { x.AlbumsId, x.GenresId });
+                    table.PrimaryKey("PK_AlbumGenre", x => new { x.AlbumId, x.GenreId });
                     table.ForeignKey(
-                        name: "FK_AlbumGenre_Albums_AlbumsId",
-                        column: x => x.AlbumsId,
-                        principalTable: "Albums",
+                        name: "FK_AlbumGenre_Album_AlbumId",
+                        column: x => x.AlbumId,
+                        principalTable: "Album",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_AlbumGenre_Genres_GenresId",
-                        column: x => x.GenresId,
-                        principalTable: "Genres",
+                        name: "FK_AlbumGenre_Genre_GenreId",
+                        column: x => x.GenreId,
+                        principalTable: "Genre",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AlbumArtist_ArtistsId",
+                name: "IX_AlbumArtist_ArtistId",
                 table: "AlbumArtist",
-                column: "ArtistsId");
+                column: "ArtistId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AlbumGenre_GenresId",
+                name: "IX_AlbumGenre_GenreId",
                 table: "AlbumGenre",
-                column: "GenresId");
+                column: "GenreId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tracks_AlbumId",
-                table: "Tracks",
+                name: "IX_Track_AlbumId",
+                table: "Track",
                 column: "AlbumId");
         }
 
@@ -155,16 +155,16 @@ namespace PlayItLoud.API.Migrations
                 name: "AlbumGenre");
 
             migrationBuilder.DropTable(
-                name: "Tracks");
+                name: "Track");
 
             migrationBuilder.DropTable(
-                name: "Artists");
+                name: "Artist");
 
             migrationBuilder.DropTable(
-                name: "Genres");
+                name: "Genre");
 
             migrationBuilder.DropTable(
-                name: "Albums");
+                name: "Album");
         }
     }
 }
