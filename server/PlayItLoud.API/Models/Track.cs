@@ -7,15 +7,20 @@ namespace PlayItLoud.API.Models
     public class Track
     {
         public int Id { get; private set; }
+
         [Required]
         [StringLength(1000)]
         public string Name { get; set; }
-        [Required]
+
+        [Range(1, int.MaxValue)]
         public int Order { get; set; }
+
         [Required]
         public TimeSpan Duration { get; set; }
+
         [Required]
         public int AlbumId { get; set; }
+
         public Album Album { get; set; }
     }
 }

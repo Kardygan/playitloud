@@ -7,9 +7,11 @@ namespace PlayItLoud.API.Models
     public class Genre
     {
         public int Id { get; private set; }
+
         [Required]
         [StringLength(50)]
         public string Name { get; set; }
+
         public ICollection<Album> Albums { get; set; } = new List<Album>();
     }
 }
