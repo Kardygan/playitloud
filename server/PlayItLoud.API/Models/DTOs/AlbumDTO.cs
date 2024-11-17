@@ -1,7 +1,11 @@
-﻿namespace PlayItLoud.API.Models.DTOs
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace PlayItLoud.API.Models.DTOs
 {
     public class AlbumDTO
     {
+        [Required(ErrorMessage = "Name is required.")]
+        [StringLength(1000, ErrorMessage = "Name cannot exceed 1000 characters.")]
         public string Name { get; set; }
         public DateTime? ReleaseDate { get; set; }
         public string? Description { get; set; }

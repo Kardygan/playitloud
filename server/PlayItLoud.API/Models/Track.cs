@@ -9,7 +9,6 @@ namespace PlayItLoud.API.Models
         public int Id { get; private set; }
         [Required]
         [StringLength(1000)]
-        [RegularExpression(@"^(?!\s*$).*", ErrorMessage = "Name cannot contain only whitespaces.")]
         public string Name { get; set; }
         [Required]
         public int Order { get; set; }
