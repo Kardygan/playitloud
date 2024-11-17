@@ -24,11 +24,6 @@ namespace PlayItLoud.API.Controllers
         [HttpPost]
         public async Task<IActionResult> PostAlbum([FromBody] AlbumDTO albumDto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
-
             await _albumService.AddAsync(albumDto);
 
             return Ok("Album successfully added.");
