@@ -21,7 +21,11 @@ namespace PlayItLoud.API.Repositories
 
         public async Task<Album?> GetByIdAsync(int id)
         {
-            return await _context.Albums.FindAsync(id);
+            return await _context.Albums
+                .Include(a => a.Artists)
+                .Include(a => a.Genres)
+                .Include(a => a.Tracks)
+                .FirstOrDefaultAsync(a => a.Id == id);
         }
 
         public void Add(Album album)
