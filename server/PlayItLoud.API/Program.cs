@@ -4,6 +4,7 @@ using PlayItLoud.API.Repositories;
 using PlayItLoud.API.Repositories.Interfaces;
 using PlayItLoud.API.Services.Interfaces;
 using PlayItLoud.API.Services;
+using PlayItLoud.API.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,9 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 # region Services
 builder.Services.AddScoped<IAlbumService, AlbumService>();
 #endregion
+
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -50,6 +54,8 @@ using (var scope = app.Services.CreateScope())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseExceptionHandler();
 
 app.MapControllers();
 
