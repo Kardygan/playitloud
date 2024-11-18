@@ -24,9 +24,9 @@ namespace PlayItLoud.API.Controllers
         [HttpPost]
         public async Task<IActionResult> PostAlbum([FromBody] AlbumDTO albumDto)
         {
-            await _albumService.AddAsync(albumDto);
+            var createdAlbum = await _albumService.AddAsync(albumDto);
 
-            return Ok("Album successfully added.");
+            return CreatedAtAction(nameof(GetAlbum), new { id = createdAlbum.Id }, createdAlbum);
         }
     }
 }

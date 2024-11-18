@@ -31,7 +31,7 @@ namespace PlayItLoud.API.Services
             return await _albumRepository.GetByIdAsync(id) ?? throw new EntityNotFoundException($"Album with id {id} not found.");
         }
 
-        public async Task AddAsync(AlbumDTO albumDto)
+        public async Task<Album> AddAsync(AlbumDTO albumDto)
         {
             EnsureUniqueIds(albumDto);
 
@@ -50,6 +50,8 @@ namespace PlayItLoud.API.Services
             _albumRepository.Add(album);
 
             await _unitOfWork.SaveChangesAsync();
+
+            return album;
         }
 
         public async Task UpdateAsync(int id, AlbumDTO albumDto)

@@ -7,7 +7,7 @@ namespace PlayItLoud.API.Services.Interfaces
     {
         Task<IEnumerable<Album>> GetAllAsync();
         Task<Album?> GetByIdAsync(int id);
-        Task AddAsync(AlbumDTO albumDto);
+        Task<Album> AddAsync(AlbumDTO albumDto);
         Task UpdateAsync(int id, AlbumDTO albumDto);
         Task RemoveAsync(int id);
     }
