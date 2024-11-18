@@ -21,8 +21,8 @@ namespace PlayItLoud.API.Models.DTOs
         [NotEmpty(ErrorMessage = "An album must have at least one genre id.")]
         public ICollection<int> GenreIds { get; set; } = new List<int>();
 
-        [NotEmpty(ErrorMessage = "An album must have at least one track.")]
         [UniqueOrderNumbers(ErrorMessage = "Track order numbers must be unique.")]
+        [SequentialOrderNumbers(ErrorMessage = "Track order numbers must start at 1 and increment without gaps.")]
         public ICollection<TrackDTO> Tracks { get; set; } = new List<TrackDTO>();
     }
 }
