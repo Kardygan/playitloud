@@ -39,8 +39,8 @@ namespace PlayItLoud.API.Services
             {
                 Name = albumDto.Name,
                 ReleaseDate = albumDto.ReleaseDate,
-                Description = string.IsNullOrWhiteSpace(albumDto.Description) ? null : albumDto.Description,
-                Label = string.IsNullOrWhiteSpace(albumDto.Label) ? null : albumDto.Label
+                Description = albumDto.Description,
+                Label = albumDto.Label
             };
 
             await AddArtistsToAlbumAsync(albumDto, album);
@@ -59,8 +59,8 @@ namespace PlayItLoud.API.Services
             var existingAlbum = await _albumRepository.GetByIdAsync(id) ?? throw new EntityNotFoundException($"Album with id {id} not found.");
             existingAlbum.Name = albumDto.Name;
             existingAlbum.ReleaseDate = albumDto.ReleaseDate;
-            existingAlbum.Description = string.IsNullOrWhiteSpace(albumDto.Description) ? null : albumDto.Description;
-            existingAlbum.Label = string.IsNullOrWhiteSpace(albumDto.Label) ? null : albumDto.Label;
+            existingAlbum.Description = albumDto.Description;
+            existingAlbum.Label = albumDto.Label;
 
             existingAlbum.Artists.Clear();
             await AddArtistsToAlbumAsync(albumDto, existingAlbum);
@@ -116,7 +116,7 @@ namespace PlayItLoud.API.Services
                 {
                     Name = trackDto.Name,
                     Order = trackDto.Order,
-                    Duration = (TimeSpan)trackDto.Duration,
+                    Duration = trackDto.Duration,
                     Album = album
                 });
             }
