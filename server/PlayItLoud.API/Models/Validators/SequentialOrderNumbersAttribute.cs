@@ -7,7 +7,7 @@ namespace PlayItLoud.API.Models.Validators
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            if (value is ICollection<TrackDTO> tracks)
+            if (value is ICollection<TrackDTO> tracks && tracks.Count > 0)
             {
                 var orderNumbers = tracks.Select(t => t.Order).OrderBy(o => o).ToList();
 

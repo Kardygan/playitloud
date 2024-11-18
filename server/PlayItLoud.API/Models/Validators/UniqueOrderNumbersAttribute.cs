@@ -7,7 +7,7 @@ namespace PlayItLoud.API.Models.Validators
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            if (value is ICollection<TrackDTO> tracks)
+            if (value is ICollection<TrackDTO> tracks && tracks.Count > 0)
             {
                 var duplicateOrderNumbers = tracks.GroupBy(t => t.Order)
                                                   .Where(g => g.Count() > 1)
