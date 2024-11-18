@@ -15,8 +15,7 @@ namespace PlayItLoud.API.Models
         [Range(1, int.MaxValue)]
         public int Order { get; set; }
 
-        [Required]
-        public TimeSpan Duration { get; set; }
+        public TimeSpan? Duration { get; set; }
 
         [Required]
         public int AlbumId { get; set; }

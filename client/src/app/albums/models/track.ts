@@ -4,7 +4,7 @@ export interface Track {
     id: number;
     name: string;
     order: number;
-    duration: string;
+    duration?: string;
     albumId: number;
     album: Album;
 }
@@ -12,5 +12,5 @@ export interface Track {
 export interface TrackDTO {
     name: string;
     order: number;
-    duration: string;
+    duration?: string;
 }

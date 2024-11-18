@@ -11,7 +11,6 @@ namespace PlayItLoud.API.Models.DTOs
         [Range(1, int.MaxValue, ErrorMessage = "Valid track order is required.")]
         public int Order { get; set; }
 
-        [Required(ErrorMessage = "Track duration is required.")]
         public TimeSpan? Duration { get; set; }
     }
 }
