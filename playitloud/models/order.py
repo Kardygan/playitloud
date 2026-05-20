@@ -1,0 +1,78 @@
+from datetime import datetime
+from decimal import Decimal
+from enum import Enum
+from typing import TYPE_CHECKING
+
+from sqlalchemy import DateTime, ForeignKey, Enum as SQLEnum, Numeric, func, CheckConstraint
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from playitloud.models.base import Base
+
+if TYPE_CHECKING:
+    from playitloud.models.user import User
+    from playitloud.models.address import Address
+    from playitloud.models.order_item import OrderItem
+
+class OrderStatus(str, Enum):
+    PENDING = "pending"
+    PAID = "paid"
+    SHIPPED = "shipped"
+    DELIVERED = "delivered"
+    CANCELLED = "cancelled"
+
+class Order(Base):
+    __tablename__ = "orders"
+    
+    id: Mapped[int] = mapped_column(primary_key=True)
+    
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id"),
+        nullable=False,
+    )
+    
+    address_id: Mapped[int] = mapped_column(
+        ForeignKey("addresses.id"),
+        nullable=False,
+    )
+    
+    order_status: Mapped[OrderStatus] = mapped_column(
+        SQLEnum(OrderStatus, name="order_status", native_enum=True),
+        nullable=False,
+        server_default=OrderStatus.PENDING.value,
+    )
+    
+    total_price: Mapped[Decimal] = mapped_column(
+        Numeric(10, 2),
+        nullable=False,
+    )
+    
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        nullable=False,
+        server_default=func.now(),
+    )
+    
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        nullable=False,
+        server_default=func.now(),
+        onupdate=func.now(),
+    )
+    
+    user: Mapped["User"] = relationship(
+        back_populates="orders",
+    )
+    
+    address: Mapped["Address"] = relationship(
+        back_populates="orders",
+    )
+    
+    order_items: Mapped[list["OrderItem"]] = relationship(
+        back_populates="order",
+        cascade="all, delete-orphan",
+    )
+    
+    __table_args__ = (
+        CheckConstraint("total_price > 0", name="chk_orders_total_price_positive"),
+    )
+    
