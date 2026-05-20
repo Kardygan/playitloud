@@ -6,11 +6,10 @@ from typing	 import TYPE_CHECKING
 from sqlalchemy import DateTime, ForeignKey, Numeric, CheckConstraint, Enum as SQLEnum, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from playitloud.models.base import Base
+from playitloud.models import Base
 
 if TYPE_CHECKING:
-    from playitloud.models.supplier import Supplier
-    from playitloud.models.supplier_order_item import SupplierOrderItem
+    from playitloud.models import Supplier, SupplierOrderItem
 
 class RestockStatus(str, Enum):
     PENDING = "pending"

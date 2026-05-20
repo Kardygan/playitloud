@@ -3,11 +3,10 @@ from typing import TYPE_CHECKING
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from playitloud.models.base import Base
+from playitloud.models import Base
 
 if TYPE_CHECKING:
-    from playitloud.models.supplier_offer import SupplierOffer
-    from playitloud.models.supplier_order import SupplierOrder
+    from playitloud.models import SupplierOffer, SupplierOrder
 
 class Supplier(Base):
     __tablename__ = "suppliers"

@@ -4,11 +4,10 @@ from typing import TYPE_CHECKING
 from sqlalchemy import ForeignKey, Numeric, CheckConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from playitloud.models.base import Base
+from playitloud.models import Base
 
 if TYPE_CHECKING:
-    from playitloud.models.album import Album
-    from playitloud.models.supplier import Supplier
+    from playitloud.models import Album, Supplier
 
 class SupplierOffer(Base):
     __tablename__ = "supplier_offers"

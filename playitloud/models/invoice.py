@@ -5,10 +5,10 @@ from typing import TYPE_CHECKING
 from sqlalchemy import CheckConstraint, DateTime, ForeignKey, String, Numeric, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from playitloud.models.base import Base
+from playitloud.models import Base
 
 if TYPE_CHECKING:
-    from playitloud.models.order import Order
+    from playitloud.models import Order
 
 class Invoice(Base):
     __tablename__ = "invoices"

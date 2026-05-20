@@ -4,11 +4,10 @@ from typing import TYPE_CHECKING
 from sqlalchemy import DateTime, String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from playitloud.models.base import Base
+from playitloud.models import Base
 
 if TYPE_CHECKING:
-    from playitloud.models.address import Address
-    from playitloud.models.order import Order
+    from playitloud.models.address import Address, Order
 
 class User(Base):
     __tablename__ = "users"

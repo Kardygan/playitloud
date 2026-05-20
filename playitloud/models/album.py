@@ -6,13 +6,10 @@ from typing import TYPE_CHECKING
 from sqlalchemy import CheckConstraint, String, Text, Enum as SQLEnum, Numeric, DateTime, Integer, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from playitloud.models.base import Base
+from playitloud.models import Base
 
 if TYPE_CHECKING:
-    from playitloud.models.artist import Artist
-    from playitloud.models.order_item import OrderItem
-    from playitloud.models.supplier_offer import SupplierOffer
-    from playitloud.models.supplier_order_item import SupplierOrderItem
+    from playitloud.models import Artist, OrderItem, SupplierOffer, SupplierOrderItem
 
 class MediaType(str, Enum):
     CD = "cd"

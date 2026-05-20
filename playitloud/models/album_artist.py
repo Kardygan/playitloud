@@ -1,7 +1,7 @@
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
 
-from playitloud.models.base import Base
+from playitloud.models import Base
 
 class AlbumArtist(Base):
     __tablename__ = "album_artists"
