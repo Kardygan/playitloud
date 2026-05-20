@@ -35,10 +35,10 @@ class Order(Base):
         nullable=False,
     )
     
-    order_status: Mapped[OrderStatus] = mapped_column(
+    status: Mapped[OrderStatus] = mapped_column(
         SQLEnum(OrderStatus, name="order_status", native_enum=True),
         nullable=False,
-        server_default=OrderStatus.PENDING.value,
+        default=OrderStatus.PENDING.value,
     )
     
     total_price: Mapped[Decimal] = mapped_column(
@@ -59,13 +59,9 @@ class Order(Base):
         onupdate=func.now(),
     )
     
-    user: Mapped["User"] = relationship(
-        back_populates="orders",
-    )
+    user: Mapped["User"] = relationship(back_populates="orders")
     
-    address: Mapped["Address"] = relationship(
-        back_populates="orders",
-    )
+    address: Mapped["Address"] = relationship(back_populates="orders")
     
     order_items: Mapped[list["OrderItem"]] = relationship(
         back_populates="order",
