@@ -1,13 +1,14 @@
 from datetime import datetime
+from typing import TYPE_CHECKING
 
 from sqlalchemy import DateTime, String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from typing import TYPE_CHECKING
 from playitloud.models.base import Base
 
 if TYPE_CHECKING:
     from playitloud.models.address import Address
+    from playitloud.models.order import Order
 
 class User(Base):
     __tablename__ = "users"
@@ -51,4 +52,8 @@ class User(Base):
     addresses: Mapped[list["Address"]] = relationship(
         back_populates="user",
         cascade="all, delete-orphan",
+    )
+    
+    orders: Mapped[list["Order"]] = relationship(
+        back_populates="user",
     )

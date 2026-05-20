@@ -1,15 +1,16 @@
 from datetime import datetime
 from decimal import Decimal
 from enum import Enum
+from typing import TYPE_CHECKING
 
 from sqlalchemy import CheckConstraint, String, Text, Enum as SQLEnum, Numeric, DateTime, Integer, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from typing import TYPE_CHECKING
 from playitloud.models.base import Base
 
 if TYPE_CHECKING:
     from playitloud.models.artist import Artist
+    from playitloud.models.order_item import OrderItem
 
 class MediaType(str, Enum):
     CD = "cd"
@@ -48,7 +49,7 @@ class Album(Base):
     stock: Mapped[int] = mapped_column(
         Integer,
         nullable=False, 
-        server_default=0,
+        server_default="0",
     )
     
     created_at: Mapped[datetime] = mapped_column(
@@ -68,6 +69,10 @@ class Album(Base):
         "Artist",
         secondary="album_artists",
         back_populates="albums",
+    )
+    
+    order_items: Mapped[list["OrderItem"]] = relationship(
+        back_populates="album",
     )
     
     __table_args__ = (
