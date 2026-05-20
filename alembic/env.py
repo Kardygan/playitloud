@@ -6,7 +6,8 @@ from sqlalchemy import pool
 from alembic import context
 
 from playitloud.core.config import DATABASE_URL
-from playitloud.models.base import Base
+from playitloud.models import Base
+import playitloud.models
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
