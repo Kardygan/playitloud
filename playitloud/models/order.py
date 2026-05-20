@@ -12,6 +12,7 @@ if TYPE_CHECKING:
     from playitloud.models.user import User
     from playitloud.models.address import Address
     from playitloud.models.order_item import OrderItem
+    from playitloud.models.invoice import Invoice
 
 class OrderStatus(str, Enum):
     PENDING = "pending"
@@ -66,6 +67,11 @@ class Order(Base):
     order_items: Mapped[list["OrderItem"]] = relationship(
         back_populates="order",
         cascade="all, delete-orphan",
+    )
+    
+    invoice: Mapped["Invoice | None"] = relationship(
+        back_populates="order",
+        uselist=False,
     )
     
     __table_args__ = (
