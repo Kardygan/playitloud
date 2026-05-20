@@ -2,9 +2,8 @@ from datetime import datetime
 from decimal import Decimal
 from enum import Enum
 
-from sqlalchemy import CheckConstraint, String, Text, Enum as SQLEnum, Numeric, DateTime, Integer
+from sqlalchemy import CheckConstraint, String, Text, Enum as SQLEnum, Numeric, DateTime, Integer, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.sql import func
 
 from typing import TYPE_CHECKING
 from playitloud.models.base import Base
