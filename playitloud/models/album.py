@@ -11,6 +11,8 @@ from playitloud.models.base import Base
 if TYPE_CHECKING:
     from playitloud.models.artist import Artist
     from playitloud.models.order_item import OrderItem
+    from playitloud.models.supplier_offer import SupplierOffer
+    from playitloud.models.supplier_order_item import SupplierOrderItem
 
 class MediaType(str, Enum):
     CD = "cd"
@@ -71,9 +73,11 @@ class Album(Base):
         back_populates="albums",
     )
     
-    order_items: Mapped[list["OrderItem"]] = relationship(
-        back_populates="album",
-    )
+    order_items: Mapped[list["OrderItem"]] = relationship(back_populates="album")
+    
+    supplier_offers: Mapped[list["SupplierOffer"]] = relationship(back_populates="album")
+    
+    supplier_order_items: Mapped[list["SupplierOrderItem"]] = relationship(back_populates="album")
     
     __table_args__ = (
         CheckConstraint("price > 0", name="chk_albums_price_positive"),
