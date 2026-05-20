@@ -12,7 +12,7 @@ from playitloud.models.base import Base
 if TYPE_CHECKING:
     from playitloud.models.artist import Artist
 
-class MediaType(Enum):
+class MediaType(str, Enum):
     CD = "cd"
     VINYL = "vinyl"
 
