@@ -1,8 +1,7 @@
 from datetime import datetime
 
-from sqlalchemy import DateTime, String
+from sqlalchemy import DateTime, String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.sql import func
 
 from typing import TYPE_CHECKING
 from playitloud.models.base import Base
