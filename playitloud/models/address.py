@@ -3,11 +3,10 @@ from typing import TYPE_CHECKING
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from playitloud.models.base import Base
+from playitloud.models import Base
 
 if TYPE_CHECKING:
-    from playitloud.models.user import User
-    from playitloud.models.order import Order
+    from playitloud.models import User, Order
 
 class Address(Base):
     __tablename__ = "addresses"

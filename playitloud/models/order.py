@@ -6,13 +6,10 @@ from typing import TYPE_CHECKING
 from sqlalchemy import DateTime, ForeignKey, Enum as SQLEnum, Numeric, func, CheckConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from playitloud.models.base import Base
+from playitloud.models import Base
 
 if TYPE_CHECKING:
-    from playitloud.models.user import User
-    from playitloud.models.address import Address
-    from playitloud.models.order_item import OrderItem
-    from playitloud.models.invoice import Invoice
+    from playitloud.models import User, Address, OrderItem, Invoice
 
 class OrderStatus(str, Enum):
     PENDING = "pending"

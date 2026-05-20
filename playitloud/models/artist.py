@@ -3,10 +3,10 @@ from typing import TYPE_CHECKING
 from sqlalchemy import String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from playitloud.models.base import Base
+from playitloud.models import Base
 
 if TYPE_CHECKING:
-    from playitloud.models.album import Album
+    from playitloud.models import Album
 
 class Artist(Base):
     __tablename__ = "artists"
