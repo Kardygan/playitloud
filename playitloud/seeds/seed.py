@@ -200,7 +200,12 @@ def seed():
 
         for i in range(180):
             user = random.choice(users)
-            address = random.choice(addresses)
+            addresses_by_user = {}
+            
+            for a in addresses:
+                addresses_by_user.setdefault(a.user_id, []).append(a)
+                
+            address = random.choice(addresses_by_user[user.id])
 
             order = Order(
                 user_id=user.id,
