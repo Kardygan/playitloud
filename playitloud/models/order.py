@@ -3,7 +3,7 @@ from decimal import Decimal
 from enum import Enum
 from typing import TYPE_CHECKING
 
-from sqlalchemy import DateTime, ForeignKey, Enum as SQLEnum, Numeric, func, CheckConstraint
+from sqlalchemy import DateTime, ForeignKey, Enum as SQLEnum, ForeignKeyConstraint, Numeric, func, CheckConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from playitloud.models import Base
@@ -28,10 +28,7 @@ class Order(Base):
         nullable=False,
     )
     
-    address_id: Mapped[int] = mapped_column(
-        ForeignKey("addresses.id"),
-        nullable=False,
-    )
+    address_id: Mapped[int] = mapped_column(nullable=False)
     
     status: Mapped[OrderStatus] = mapped_column(
         SQLEnum(OrderStatus, name="order_status", native_enum=True),
@@ -73,5 +70,10 @@ class Order(Base):
     
     __table_args__ = (
         CheckConstraint("total_price > 0", name="chk_orders_total_price_positive"),
+        ForeignKeyConstraint(
+            ["address_id", "user_id"],
+            ["addresses.id", "addresses.user_id"],
+            name="fk_orders_address_owner",
+        ),
     )
     

@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from sqlalchemy import ForeignKey, String
+from sqlalchemy import ForeignKey, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from playitloud.models import Base
@@ -38,10 +38,14 @@ class Address(Base):
         nullable=False,
     )
     
-    user: Mapped["User"] = relationship(
-        back_populates="addresses",
-    )
+    user: Mapped["User"] = relationship(back_populates="addresses")
     
-    orders: Mapped[list["Order"]] = relationship(
-        back_populates="address",
+    orders: Mapped[list["Order"]] = relationship(back_populates="address")
+    
+    __table_args__ = (
+        UniqueConstraint(
+            "id",
+            "user_id",
+            name="uq_addresses_id_user",
+        ),
     )
