@@ -12,16 +12,14 @@ if TYPE_CHECKING:
 class SupplierOrderItem(Base):
     __tablename__ = "supplier_order_items"
     
-    id: Mapped[int] = mapped_column(primary_key=True)
-    
     supplier_order_id: Mapped[int] = mapped_column(
         ForeignKey("supplier_orders.id"),
-        nullable=False,
+        primary_key=True,
     )
     
     album_id: Mapped[int] = mapped_column(
         ForeignKey("albums.id"),
-        nullable=False,
+        primary_key=True,
     )
     
     quantity: Mapped[int] = mapped_column(
