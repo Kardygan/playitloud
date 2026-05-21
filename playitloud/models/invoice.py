@@ -38,9 +38,7 @@ class Invoice(Base):
         server_default=func.now(),
     )
     
-    order: Mapped["Order"] = relationship(
-        back_populates="invoice",
-    )
+    order: Mapped["Order"] = relationship(back_populates="invoice")
     
     __table_args__ = (
         CheckConstraint("total_amount > 0", name="chk_invoices_total_amount_positive"),

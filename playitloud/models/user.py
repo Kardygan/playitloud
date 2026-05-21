@@ -53,6 +53,4 @@ class User(Base):
         cascade="all, delete-orphan",
     )
     
-    orders: Mapped[list["Order"]] = relationship(
-        back_populates="user",
-    )
+    orders: Mapped[list["Order"]] = relationship(back_populates="user")

@@ -12,16 +12,14 @@ if TYPE_CHECKING:
 class OrderItem(Base):
     __tablename__ = "order_items"
     
-    id: Mapped[int] = mapped_column(primary_key=True)
-    
     order_id: Mapped[int] = mapped_column(
         ForeignKey("orders.id"),
-        nullable=False,
+        primary_key=True,
     )
     
     album_id: Mapped[int] = mapped_column(
         ForeignKey("albums.id"),
-        nullable=False,
+        primary_key=True,
     )
     
     quantity: Mapped[int] = mapped_column(
@@ -34,13 +32,9 @@ class OrderItem(Base):
         nullable=False,
     )
     
-    order: Mapped["Order"] = relationship(
-        back_populates="order_items",
-    )
+    order: Mapped["Order"] = relationship(back_populates="order_items")
     
-    album: Mapped["Album"] = relationship(
-        back_populates="order_items",
-    )
+    album: Mapped["Album"] = relationship(back_populates="order_items")
     
     __table_args__ = (
         CheckConstraint("quantity > 0", name="chk_order_items_quantity_positive"),
