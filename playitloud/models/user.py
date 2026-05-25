@@ -20,7 +20,7 @@ class User(Base):
         unique=True,
     )
     
-    password_hash: Mapped[str] = mapped_column(
+    hashed_password: Mapped[str] = mapped_column(
         String(255),
         nullable=False,
     )
@@ -58,4 +58,9 @@ class User(Base):
         cascade="all, delete-orphan",
     )
     
-    orders: Mapped[list["Order"]] = relationship(back_populates="user")
+    orders: Mapped[list["Order"]] = relationship(
+        back_populates="user",
+        primaryjoin="User.id == Order.user_id",
+        foreign_keys="[Order.user_id]",
+        overlaps="address,orders",
+    )
