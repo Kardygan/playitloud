@@ -23,10 +23,7 @@ class Order(Base):
     
     id: Mapped[int] = mapped_column(primary_key=True)
     
-    user_id: Mapped[int] = mapped_column(
-        ForeignKey("users.id"),
-        nullable=False,
-    )
+    user_id: Mapped[int] = mapped_column(nullable=False)
     
     address_id: Mapped[int] = mapped_column(nullable=False)
     
@@ -54,9 +51,18 @@ class Order(Base):
         onupdate=func.now(),
     )
     
-    user: Mapped["User"] = relationship(back_populates="orders")
-    
-    address: Mapped["Address"] = relationship(back_populates="orders")
+    user: Mapped["User"] = relationship(
+        back_populates="orders",
+        primaryjoin="Order.user_id == User.id",
+        foreign_keys="[Order.user_id]",
+        overlaps="address,orders",
+    )
+
+    address: Mapped["Address"] = relationship(
+        back_populates="orders",
+        primaryjoin="Order.address_id == Address.id",
+        foreign_keys="[Order.address_id]",
+    )
     
     order_items: Mapped[list["OrderItem"]] = relationship(
         back_populates="order",
