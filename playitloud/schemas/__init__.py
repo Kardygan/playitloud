@@ -1,3 +1,8 @@
+from .address import (
+    AddressCreate,
+    AddressRead,
+    AddressUpdate,
+)
 from .user import (
     UserCreate,
     UserLogin,
@@ -6,6 +11,9 @@ from .user import (
 )
 
 __all__ = [
+    "AddressCreate",
+    "AddressRead",
+    "AddressUpdate",
     "UserCreate",
     "UserLogin",
     "UserRead",
