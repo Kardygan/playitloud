@@ -7,7 +7,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from playitloud.models import Base
 
 if TYPE_CHECKING:
-    from playitloud.models.address import Address, Order
+    from playitloud.models import Address, Order
 
 class User(Base):
     __tablename__ = "users"
