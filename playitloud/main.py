@@ -1,0 +1,20 @@
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
+
+from playitloud.routers import users
+
+app = FastAPI(title="Playitloud API")
+
+app.include_router(users.router)
+
+
+@app.exception_handler(ValueError)
+async def value_error_handler(request: Request, exc: ValueError) -> JSONResponse:
+    msg = str(exc)
+    if "already exists" in msg:
+        status_code = 409
+    elif "not found" in msg.lower():
+        status_code = 404
+    else:
+        status_code = 400
+    return JSONResponse(status_code=status_code, content={"detail": msg})
