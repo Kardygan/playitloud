@@ -40,7 +40,12 @@ class Address(Base):
     
     user: Mapped["User"] = relationship(back_populates="addresses")
     
-    orders: Mapped[list["Order"]] = relationship(back_populates="address")
+    orders: Mapped[list["Order"]] = relationship(
+        back_populates="address",
+        primaryjoin="Order.address_id == Address.id",
+        foreign_keys="[Order.address_id]",
+        overlaps="user,orders",
+    )
     
     __table_args__ = (
         UniqueConstraint(
