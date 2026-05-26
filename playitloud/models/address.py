@@ -3,6 +3,12 @@ from typing import TYPE_CHECKING
 from sqlalchemy import ForeignKey, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from playitloud.core.constants import (
+    MAX_CITY_LENGTH,
+    MAX_COUNTRY_CODE_LENGTH,
+    MAX_POSTAL_CODE_LENGTH,
+    MAX_STREET_LENGTH,
+)
 from playitloud.models import Base
 
 if TYPE_CHECKING:
@@ -19,22 +25,22 @@ class Address(Base):
     )
     
     street: Mapped[str] = mapped_column(
-        String(255),
+        String(MAX_STREET_LENGTH),
         nullable=False,
     )
-    
+
     city: Mapped[str] = mapped_column(
-        String(100),
+        String(MAX_CITY_LENGTH),
         nullable=False,
     )
-    
+
     postal_code: Mapped[str] = mapped_column(
-        String(20),
+        String(MAX_POSTAL_CODE_LENGTH),
         nullable=False,
     )
-    
+
     country_code: Mapped[str] = mapped_column(
-        String(2),
+        String(MAX_COUNTRY_CODE_LENGTH),
         nullable=False,
     )
     

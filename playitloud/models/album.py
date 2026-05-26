@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 from sqlalchemy import CheckConstraint, String, Text, Enum as SQLEnum, Numeric, DateTime, Integer, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from playitloud.core.constants import MAX_ALBUM_NAME_LENGTH
 from playitloud.models import Base
 
 if TYPE_CHECKING:
@@ -21,17 +22,17 @@ class Album(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     
     name: Mapped[str] = mapped_column(
-        String(150),
+        String(MAX_ALBUM_NAME_LENGTH),
         nullable=False,
     )
-    
+
     description: Mapped[str | None] = mapped_column(
         Text,
         nullable=True,
     )
-    
+
     cover_url: Mapped[str | None] = mapped_column(
-        String(255),
+        Text,
         nullable=True,
     )
     

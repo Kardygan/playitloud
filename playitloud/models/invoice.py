@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 from sqlalchemy import CheckConstraint, DateTime, ForeignKey, String, Numeric, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from playitloud.core.constants import MAX_INVOICE_NUMBER_LENGTH
 from playitloud.models import Base
 
 if TYPE_CHECKING:
@@ -22,7 +23,7 @@ class Invoice(Base):
     )
     
     invoice_number: Mapped[str] = mapped_column(
-        String(50),
+        String(MAX_INVOICE_NUMBER_LENGTH),
         nullable=False,
         unique=True,
     )

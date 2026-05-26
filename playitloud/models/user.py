@@ -4,6 +4,12 @@ from typing import TYPE_CHECKING
 from sqlalchemy import DateTime, String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from playitloud.core.constants import (
+    MAX_EMAIL_LENGTH,
+    MAX_PASSWORD_HASH_LENGTH,
+    MAX_FIRST_NAME_LENGTH,
+    MAX_LAST_NAME_LENGTH,
+)
 from playitloud.models import Base
 
 if TYPE_CHECKING:
@@ -15,23 +21,23 @@ class User(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     
     email: Mapped[str] = mapped_column(
-        String(255),
+        String(MAX_EMAIL_LENGTH),
         nullable=False,
         unique=True,
     )
-    
+
     hashed_password: Mapped[str] = mapped_column(
-        String(255),
+        String(MAX_PASSWORD_HASH_LENGTH),
         nullable=False,
     )
-    
+
     first_name: Mapped[str] = mapped_column(
-        String(50),
+        String(MAX_FIRST_NAME_LENGTH),
         nullable=False,
     )
-    
+
     last_name: Mapped[str] = mapped_column(
-        String(50),
+        String(MAX_LAST_NAME_LENGTH),
         nullable=False,
     )
     
