@@ -3,6 +3,16 @@ from .address import (
     AddressRead,
     AddressUpdate,
 )
+from .album import (
+    AlbumCreate,
+    AlbumRead,
+    AlbumUpdate,
+)
+from .artist import (
+    ArtistCreate,
+    ArtistRead,
+    ArtistUpdate,
+)
 from .user import (
     UserCreate,
     UserLogin,
@@ -14,6 +24,12 @@ __all__ = [
     "AddressCreate",
     "AddressRead",
     "AddressUpdate",
+    "AlbumCreate",
+    "AlbumRead",
+    "AlbumUpdate",
+    "ArtistCreate",
+    "ArtistRead",
+    "ArtistUpdate",
     "UserCreate",
     "UserLogin",
     "UserRead",

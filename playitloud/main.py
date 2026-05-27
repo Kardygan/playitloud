@@ -1,12 +1,14 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from playitloud.routers import addresses, users
+from playitloud.routers import addresses, albums, artists, users
 
 app = FastAPI(title="Playitloud API")
 
 app.include_router(users.router)
 app.include_router(addresses.router)
+app.include_router(artists.router)
+app.include_router(albums.router)
 
 
 @app.exception_handler(ValueError)

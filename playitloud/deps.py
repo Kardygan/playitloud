@@ -4,8 +4,8 @@ from fastapi import Depends
 from sqlalchemy.orm import Session
 
 from playitloud.core.database import SessionLocal
-from playitloud.repositories import AddressRepository, UserRepository
-from playitloud.services import AddressService, UserService
+from playitloud.repositories import AddressRepository, AlbumRepository, ArtistRepository, UserRepository
+from playitloud.services import AddressService, AlbumService, ArtistService, UserService
 
 
 def get_db() -> Generator[Session, None, None]:
@@ -19,6 +19,18 @@ def get_db() -> Generator[Session, None, None]:
 def get_user_service(session: Session = Depends(get_db)) -> UserService:
     repository = UserRepository(session)
     return UserService(session=session, user_repository=repository)
+
+
+def get_artist_service(session: Session = Depends(get_db)) -> ArtistService:
+    return ArtistService(session=session, artist_repository=ArtistRepository(session))
+
+
+def get_album_service(session: Session = Depends(get_db)) -> AlbumService:
+    return AlbumService(
+        session=session,
+        album_repository=AlbumRepository(session),
+        artist_repository=ArtistRepository(session),
+    )
 
 
 def get_address_service(session: Session = Depends(get_db)) -> AddressService:
