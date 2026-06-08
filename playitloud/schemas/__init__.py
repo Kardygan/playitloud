@@ -13,6 +13,13 @@ from .artist import (
     ArtistRead,
     ArtistUpdate,
 )
+from .order import (
+    OrderCreate,
+    OrderItemCreate,
+    OrderItemRead,
+    OrderRead,
+    OrderStatusUpdate,
+)
 from .user import (
     UserCreate,
     UserLogin,
@@ -30,6 +37,11 @@ __all__ = [
     "ArtistCreate",
     "ArtistRead",
     "ArtistUpdate",
+    "OrderCreate",
+    "OrderItemCreate",
+    "OrderItemRead",
+    "OrderRead",
+    "OrderStatusUpdate",
     "UserCreate",
     "UserLogin",
     "UserRead",
