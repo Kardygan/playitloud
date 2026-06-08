@@ -1,4 +1,6 @@
-from pydantic import BaseModel, ConfigDict, Field
+from typing import Annotated
+
+from pydantic import BaseModel, BeforeValidator, ConfigDict, Field
 
 from playitloud.core.constants import (
     MAX_CITY_LENGTH,
@@ -8,11 +10,24 @@ from playitloud.core.constants import (
 )
 
 
+def _normalize_country_code(value: str) -> str:
+    if isinstance(value, str):
+        return value.strip().upper()
+    return value
+
+
+CountryCode = Annotated[
+    str,
+    BeforeValidator(_normalize_country_code),
+    Field(max_length=MAX_COUNTRY_CODE_LENGTH),
+]
+
+
 class AddressCreate(BaseModel):
     street: str = Field(max_length=MAX_STREET_LENGTH)
     city: str = Field(max_length=MAX_CITY_LENGTH)
     postal_code: str = Field(max_length=MAX_POSTAL_CODE_LENGTH)
-    country_code: str = Field(max_length=MAX_COUNTRY_CODE_LENGTH)
+    country_code: CountryCode
 
 
 class AddressRead(BaseModel):
@@ -30,4 +45,4 @@ class AddressUpdate(BaseModel):
     street: str = Field(max_length=MAX_STREET_LENGTH)
     city: str = Field(max_length=MAX_CITY_LENGTH)
     postal_code: str = Field(max_length=MAX_POSTAL_CODE_LENGTH)
-    country_code: str = Field(max_length=MAX_COUNTRY_CODE_LENGTH)
+    country_code: CountryCode
