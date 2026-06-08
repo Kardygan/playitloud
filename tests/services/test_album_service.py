@@ -1,5 +1,6 @@
 import pytest
 from decimal import Decimal
+from typing import Any
 
 from playitloud.models.album import MediaType
 from playitloud.repositories.album_repository import AlbumRepository
@@ -25,7 +26,7 @@ def _make_artist(db_session, name: str = "Test Artist"):
 
 
 def _album_create(**kwargs) -> AlbumCreate:
-    defaults = dict(name="Test Album", media_type=MediaType.CD, price=Decimal("14.99"), stock=5)
+    defaults: dict[str, Any] = dict(name="Test Album", media_type=MediaType.CD, price=Decimal("14.99"), stock=5)
     defaults.update(kwargs)
 
     return AlbumCreate(**defaults)
