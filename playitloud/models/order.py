@@ -30,7 +30,7 @@ class Order(Base):
     status: Mapped[OrderStatus] = mapped_column(
         SQLEnum(OrderStatus, name="order_status", native_enum=True),
         nullable=False,
-        default=OrderStatus.PENDING.value,
+        default=OrderStatus.PENDING,
     )
     
     total_price: Mapped[Decimal] = mapped_column(

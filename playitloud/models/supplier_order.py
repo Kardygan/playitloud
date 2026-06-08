@@ -30,7 +30,7 @@ class SupplierOrder(Base):
     status: Mapped[RestockStatus] = mapped_column(
         SQLEnum(RestockStatus, name="restock_status", native_enum=True),
         nullable=False,
-        default=RestockStatus.PENDING.value,
+        default=RestockStatus.PENDING,
     )
     
     total_price: Mapped[Decimal] = mapped_column(
