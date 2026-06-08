@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 # User
 MAX_EMAIL_LENGTH = 254
 MAX_PASSWORD_HASH_LENGTH = 255
@@ -7,6 +9,8 @@ MAX_LAST_NAME_LENGTH = 50
 # Artist / Album
 MAX_ARTIST_NAME_LENGTH = 100
 MAX_ALBUM_NAME_LENGTH = 150
+# Album price — matches Numeric(10, 2) max
+MAX_PRICE = Decimal("99999999.99")
 
 # Address
 MAX_STREET_LENGTH = 255
