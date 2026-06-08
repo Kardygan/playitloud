@@ -11,9 +11,7 @@ class UserService:
         self.user_repository = user_repository  
 
     def create_user(self, user_create: UserCreate) -> UserRead:
-        existing_user = self.user_repository.get_by_email(user_create.email)
-
-        if existing_user:
+        if self.user_repository.email_exists(user_create.email):
             raise ValueError("Email already exists.")
 
         user = User(

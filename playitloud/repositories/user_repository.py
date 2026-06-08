@@ -22,11 +22,16 @@ class UserRepository:
 
     def get_by_email(self, email: str) -> User | None:
         statement = select(User).where(
-            User.email == email, 
+            User.email == email,
             User.deleted_at.is_(None),
         )
-        
+
         return self.session.scalar(statement)
+
+    def email_exists(self, email: str) -> bool:
+        statement = select(User.id).where(User.email == email)
+
+        return self.session.scalar(statement) is not None
 
     def get_all(self) -> list[User]:
         statement = select(User).where(User.deleted_at.is_(None))

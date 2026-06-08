@@ -41,7 +41,13 @@ def test_create_user_duplicate_email(db_session):
         last_name="Test",
     )
 
-    service.create_user(user_create)
+    created = service.create_user(user_create)
+
+    with pytest.raises(ValueError):
+        service.create_user(user_create)
+
+    # A soft-deleted user's email stays taken (must not 500 on reuse).
+    service.delete_user(created.id)
 
     with pytest.raises(ValueError):
         service.create_user(user_create)
