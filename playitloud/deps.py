@@ -9,9 +9,21 @@ from playitloud.repositories import (
     AlbumRepository,
     ArtistRepository,
     OrderRepository,
+    SupplierOfferRepository,
+    SupplierOrderRepository,
+    SupplierRepository,
     UserRepository,
 )
-from playitloud.services import AddressService, AlbumService, ArtistService, OrderService, UserService
+from playitloud.services import (
+    AddressService,
+    AlbumService,
+    ArtistService,
+    OrderService,
+    SupplierOfferService,
+    SupplierOrderService,
+    SupplierService,
+    UserService,
+)
 
 
 def get_db() -> Generator[Session, None, None]:
@@ -56,4 +68,27 @@ def get_order_service(session: Session = Depends(get_db)) -> OrderService:
         user_repository=UserRepository(session),
         address_repository=AddressRepository(session),
         album_repository=AlbumRepository(session),
+    )
+
+
+def get_supplier_service(session: Session = Depends(get_db)) -> SupplierService:
+    return SupplierService(session=session, supplier_repository=SupplierRepository(session))
+
+
+def get_supplier_offer_service(session: Session = Depends(get_db)) -> SupplierOfferService:
+    return SupplierOfferService(
+        session=session,
+        supplier_offer_repository=SupplierOfferRepository(session),
+        supplier_repository=SupplierRepository(session),
+        album_repository=AlbumRepository(session),
+    )
+
+
+def get_supplier_order_service(session: Session = Depends(get_db)) -> SupplierOrderService:
+    return SupplierOrderService(
+        session=session,
+        supplier_order_repository=SupplierOrderRepository(session),
+        supplier_repository=SupplierRepository(session),
+        album_repository=AlbumRepository(session),
+        supplier_offer_repository=SupplierOfferRepository(session),
     )

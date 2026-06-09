@@ -20,6 +20,23 @@ from .order import (
     OrderRead,
     OrderStatusUpdate,
 )
+from .supplier import (
+    SupplierCreate,
+    SupplierRead,
+    SupplierUpdate,
+)
+from .supplier_offer import (
+    SupplierOfferCreate,
+    SupplierOfferRead,
+    SupplierOfferUpdate,
+)
+from .supplier_order import (
+    RestockStatusUpdate,
+    SupplierOrderCreate,
+    SupplierOrderItemCreate,
+    SupplierOrderItemRead,
+    SupplierOrderRead,
+)
 from .user import (
     UserCreate,
     UserLogin,
@@ -42,6 +59,17 @@ __all__ = [
     "OrderItemRead",
     "OrderRead",
     "OrderStatusUpdate",
+    "RestockStatusUpdate",
+    "SupplierCreate",
+    "SupplierOfferCreate",
+    "SupplierOfferRead",
+    "SupplierOfferUpdate",
+    "SupplierOrderCreate",
+    "SupplierOrderItemCreate",
+    "SupplierOrderItemRead",
+    "SupplierOrderRead",
+    "SupplierRead",
+    "SupplierUpdate",
     "UserCreate",
     "UserLogin",
     "UserRead",
