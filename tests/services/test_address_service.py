@@ -40,6 +40,10 @@ def test_create_address(db_session):
     assert address.user_id == user.id
     assert address.city == "Paris"
 
+    # blank/whitespace-only fields are rejected (422), not stored
+    with pytest.raises(ValidationError):
+        AddressCreate(street="   ", city="Paris", postal_code="75001", country_code="FR")
+
 
 def test_create_address_normalizes_country_code(db_session):
     user = _make_user(db_session)
@@ -51,11 +55,6 @@ def test_create_address_normalizes_country_code(db_session):
     )
 
     assert address.country_code == "FR"
-
-
-def test_create_address_rejects_blank_street():
-    with pytest.raises(ValidationError):
-        AddressCreate(street="   ", city="Paris", postal_code="75001", country_code="FR")
 
 
 def test_get_address_wrong_user(db_session):

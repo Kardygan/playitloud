@@ -6,26 +6,6 @@ from playitloud.schemas import UserCreate
 from playitloud.services import UserService
 
 
-def test_create_user_rejects_blank_first_name():
-    with pytest.raises(ValidationError):
-        UserCreate(
-            email="blank@test.com",
-            password="secret123456",
-            first_name="   ",
-            last_name="Test",
-        )
-
-
-def test_create_user_rejects_short_password():
-    with pytest.raises(ValidationError):
-        UserCreate(
-            email="shortpw@test.com",
-            password="short",
-            first_name="Tommy",
-            last_name="Test",
-        )
-
-
 def test_create_user(db_session):
     repository = UserRepository(db_session)
 
@@ -45,6 +25,12 @@ def test_create_user(db_session):
 
     assert created_user.email == "test@test.com"
     assert created_user.first_name == "Tommy"
+
+    # blank names and sub-policy passwords are rejected (422), not stored
+    with pytest.raises(ValidationError):
+        UserCreate(email="blank@test.com", password="secret123456", first_name="   ", last_name="Test")
+    with pytest.raises(ValidationError):
+        UserCreate(email="short@test.com", password="short", first_name="Tommy", last_name="Test")
 
 
 def test_create_user_duplicate_email(db_session):

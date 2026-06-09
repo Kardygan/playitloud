@@ -2,6 +2,9 @@ import pytest
 from decimal import Decimal
 from typing import Any
 
+from pydantic import ValidationError
+
+
 from playitloud.models.album import MediaType
 from playitloud.repositories.album_repository import AlbumRepository
 from playitloud.repositories.artist_repository import ArtistRepository
@@ -41,6 +44,10 @@ def test_create_album_with_artists(db_session):
 
     assert len(result.artists) == 1
     assert result.artists[0].id == artist.id
+
+    # price beyond 2 decimal places is rejected, not silently rounded to 10.00
+    with pytest.raises(ValidationError):
+        _album_create(price=Decimal("9.999"))
 
 
 def test_create_album_invalid_artist_id(db_session):

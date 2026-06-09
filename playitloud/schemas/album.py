@@ -14,7 +14,7 @@ class AlbumCreate(BaseModel):
     description: str | None = None
     cover_url: str | None = None
     media_type: MediaType
-    price: Decimal = Field(gt=0, le=MAX_PRICE)
+    price: Decimal = Field(gt=0, le=MAX_PRICE, max_digits=10, decimal_places=2)
     stock: int = Field(ge=0, default=0)
     artist_ids: list[int] = []
 
@@ -38,6 +38,6 @@ class AlbumUpdate(BaseModel):
     name: NonBlankStr = Field(max_length=MAX_ALBUM_NAME_LENGTH)
     description: str | None = None
     cover_url: str | None = None
-    price: Decimal = Field(gt=0, le=MAX_PRICE)
+    price: Decimal = Field(gt=0, le=MAX_PRICE, max_digits=10, decimal_places=2)
     stock: int = Field(ge=0, default=0)
     artist_ids: list[int] = []
