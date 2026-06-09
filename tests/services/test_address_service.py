@@ -1,4 +1,5 @@
 import pytest
+from pydantic import ValidationError
 
 from playitloud.repositories import AddressRepository, UserRepository
 from playitloud.schemas import AddressCreate, UserCreate
@@ -11,7 +12,7 @@ def _make_user(db_session):
     return user_service.create_user(
         UserCreate(
             email="user@test.com",
-            password="secret123",
+            password="secret123456",
             first_name="Test",
             last_name="User",
         )
@@ -50,6 +51,11 @@ def test_create_address_normalizes_country_code(db_session):
     )
 
     assert address.country_code == "FR"
+
+
+def test_create_address_rejects_blank_street():
+    with pytest.raises(ValidationError):
+        AddressCreate(street="   ", city="Paris", postal_code="75001", country_code="FR")
 
 
 def test_get_address_wrong_user(db_session):

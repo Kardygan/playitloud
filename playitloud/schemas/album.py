@@ -6,10 +6,11 @@ from pydantic import BaseModel, ConfigDict, Field
 from playitloud.core.constants import MAX_ALBUM_NAME_LENGTH, MAX_PRICE
 from playitloud.models.album import MediaType
 from playitloud.schemas.artist import ArtistRead
+from playitloud.schemas.types import NonBlankStr
 
 
 class AlbumCreate(BaseModel):
-    name: str = Field(max_length=MAX_ALBUM_NAME_LENGTH)
+    name: NonBlankStr = Field(max_length=MAX_ALBUM_NAME_LENGTH)
     description: str | None = None
     cover_url: str | None = None
     media_type: MediaType
@@ -34,7 +35,7 @@ class AlbumRead(BaseModel):
 
 
 class AlbumUpdate(BaseModel):
-    name: str = Field(max_length=MAX_ALBUM_NAME_LENGTH)
+    name: NonBlankStr = Field(max_length=MAX_ALBUM_NAME_LENGTH)
     description: str | None = None
     cover_url: str | None = None
     price: Decimal = Field(gt=0, le=MAX_PRICE)

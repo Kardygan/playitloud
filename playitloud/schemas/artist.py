@@ -1,10 +1,11 @@
 from pydantic import BaseModel, ConfigDict, Field
 
 from playitloud.core.constants import MAX_ARTIST_NAME_LENGTH
+from playitloud.schemas.types import NonBlankStr
 
 
 class ArtistCreate(BaseModel):
-    name: str = Field(max_length=MAX_ARTIST_NAME_LENGTH)
+    name: NonBlankStr = Field(max_length=MAX_ARTIST_NAME_LENGTH)
     picture_url: str | None = None
     description: str | None = None
 
@@ -19,6 +20,6 @@ class ArtistRead(BaseModel):
 
 
 class ArtistUpdate(BaseModel):
-    name: str = Field(max_length=MAX_ARTIST_NAME_LENGTH)
+    name: NonBlankStr = Field(max_length=MAX_ARTIST_NAME_LENGTH)
     picture_url: str | None = None
     description: str | None = None

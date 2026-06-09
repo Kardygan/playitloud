@@ -8,6 +8,7 @@ from playitloud.core.constants import (
     MAX_POSTAL_CODE_LENGTH,
     MAX_STREET_LENGTH,
 )
+from playitloud.schemas.types import NonBlankStr
 
 
 def _normalize_country_code(value: str) -> str:
@@ -24,9 +25,9 @@ CountryCode = Annotated[
 
 
 class AddressCreate(BaseModel):
-    street: str = Field(max_length=MAX_STREET_LENGTH)
-    city: str = Field(max_length=MAX_CITY_LENGTH)
-    postal_code: str = Field(max_length=MAX_POSTAL_CODE_LENGTH)
+    street: NonBlankStr = Field(max_length=MAX_STREET_LENGTH)
+    city: NonBlankStr = Field(max_length=MAX_CITY_LENGTH)
+    postal_code: NonBlankStr = Field(max_length=MAX_POSTAL_CODE_LENGTH)
     country_code: CountryCode
 
 
@@ -42,7 +43,7 @@ class AddressRead(BaseModel):
 
 
 class AddressUpdate(BaseModel):
-    street: str = Field(max_length=MAX_STREET_LENGTH)
-    city: str = Field(max_length=MAX_CITY_LENGTH)
-    postal_code: str = Field(max_length=MAX_POSTAL_CODE_LENGTH)
+    street: NonBlankStr = Field(max_length=MAX_STREET_LENGTH)
+    city: NonBlankStr = Field(max_length=MAX_CITY_LENGTH)
+    postal_code: NonBlankStr = Field(max_length=MAX_POSTAL_CODE_LENGTH)
     country_code: CountryCode

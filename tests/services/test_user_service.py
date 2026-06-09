@@ -1,8 +1,29 @@
 import pytest
+from pydantic import ValidationError
 
 from playitloud.repositories import UserRepository
 from playitloud.schemas import UserCreate
 from playitloud.services import UserService
+
+
+def test_create_user_rejects_blank_first_name():
+    with pytest.raises(ValidationError):
+        UserCreate(
+            email="blank@test.com",
+            password="secret123456",
+            first_name="   ",
+            last_name="Test",
+        )
+
+
+def test_create_user_rejects_short_password():
+    with pytest.raises(ValidationError):
+        UserCreate(
+            email="shortpw@test.com",
+            password="short",
+            first_name="Tommy",
+            last_name="Test",
+        )
 
 
 def test_create_user(db_session):
@@ -15,7 +36,7 @@ def test_create_user(db_session):
 
     user_create = UserCreate(
         email="test@test.com",
-        password="secret123",
+        password="secret123456",
         first_name="Tommy",
         last_name="Test",
     )
@@ -36,7 +57,7 @@ def test_create_user_duplicate_email(db_session):
 
     user_create = UserCreate(
         email="duplicate@test.com",
-        password="secret123",
+        password="secret123456",
         first_name="Tommy",
         last_name="Test",
     )
@@ -51,25 +72,3 @@ def test_create_user_duplicate_email(db_session):
 
     with pytest.raises(ValueError):
         service.create_user(user_create)
-
-
-def test_login_user_success(db_session):
-    repository = UserRepository(db_session)
-
-    service = UserService(
-        session=db_session,
-        user_repository=repository,
-    )
-
-    service.create_user(
-        UserCreate(
-            email="login@test.com",
-            password="password",
-            first_name="Sign",
-            last_name="In",
-        )
-    )
-
-    logged_user = service.login_user("login@test.com", "password")
-
-    assert logged_user

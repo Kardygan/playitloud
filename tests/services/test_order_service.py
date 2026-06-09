@@ -31,7 +31,7 @@ def _make_user(db_session):
     return user_service.create_user(
         UserCreate(
             email="user@test.com",
-            password="secret123",
+            password="secret123456",
             first_name="Test",
             last_name="User",
         )
