@@ -53,7 +53,10 @@ class SupplierOrder(Base):
     
     supplier: Mapped["Supplier"] = relationship(back_populates="supplier_orders")
     
-    supplier_order_items: Mapped[list["SupplierOrderItem"]] = relationship(back_populates="supplier_order")
+    supplier_order_items: Mapped[list["SupplierOrderItem"]] = relationship(
+        back_populates="supplier_order",
+        cascade="all, delete-orphan",
+    )
     
     __table_args__ = (
         CheckConstraint("total_price > 0", name="chk_supplier_orders_total_price_positive"),
