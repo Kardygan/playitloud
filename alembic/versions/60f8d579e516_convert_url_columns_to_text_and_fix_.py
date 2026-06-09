@@ -54,9 +54,11 @@ def downgrade() -> None:
     op.alter_column('artists', 'picture_url',
                existing_type=sa.Text(),
                type_=sa.VARCHAR(length=255),
-               existing_nullable=True)
+               existing_nullable=True,
+               postgresql_using='left(picture_url, 255)')
     op.alter_column('albums', 'cover_url',
                existing_type=sa.Text(),
                type_=sa.VARCHAR(length=255),
-               existing_nullable=True)
+               existing_nullable=True,
+               postgresql_using='left(cover_url, 255)')
     # ### end Alembic commands ###

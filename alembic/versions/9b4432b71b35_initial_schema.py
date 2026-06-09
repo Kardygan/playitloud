@@ -165,4 +165,7 @@ def downgrade() -> None:
     op.drop_table('suppliers')
     op.drop_table('artists')
     op.drop_table('albums')
+    op.execute('DROP TYPE IF EXISTS order_status')
+    op.execute('DROP TYPE IF EXISTS restock_status')
+    op.execute('DROP TYPE IF EXISTS media_type')
     # ### end Alembic commands ###
