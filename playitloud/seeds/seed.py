@@ -1,302 +1,550 @@
-from decimal import Decimal
 import random
+from decimal import Decimal
 
 from playitloud.core.database import SessionLocal
+from playitloud.core.security import hash_password
+from playitloud.models import (
+    Address,
+    Album,
+    Artist,
+    Invoice,
+    Order,
+    OrderItem,
+    Supplier,
+    SupplierOffer,
+    SupplierOrder,
+    SupplierOrderItem,
+    User,
+)
+from playitloud.models.album import MediaType
+from playitloud.models.order import OrderStatus
+from playitloud.models.supplier_order import RestockStatus
 
-from playitloud.models.user import User
-from playitloud.models.address import Address
-from playitloud.models.artist import Artist
-from playitloud.models.album import Album, MediaType
-from playitloud.models.order import Order, OrderStatus
-from playitloud.models.order_item import OrderItem
-from playitloud.models.invoice import Invoice
-from playitloud.models.supplier import Supplier
-from playitloud.models.supplier_offer import SupplierOffer
-from playitloud.models.supplier_order import SupplierOrder, RestockStatus
-from playitloud.models.supplier_order_item import SupplierOrderItem
+CD = MediaType.CD
+VINYL = MediaType.VINYL
+
+USERS = [
+    ("Lucas", "Dubois"),
+    ("Emma", "Lambert"),
+    ("Noah", "Martin"),
+    ("Mila", "Janssens"),
+    ("Liam", "Peeters"),
+    ("Olivia", "Maes"),
+    ("Hugo", "Dupont"),
+    ("Lina", "Wouters"),
+    ("Jules", "Lemaire"),
+    ("Sofia", "Claes"),
+    ("Arthur", "Simon"),
+    ("Nora", "Goossens"),
+]
+
+CITIES = [
+    ("Bruxelles", "1000"),
+    ("Antwerpen", "2000"),
+    ("Leuven", "3000"),
+    ("Liège", "4000"),
+    ("Namur", "5000"),
+    ("Charleroi", "6000"),
+    ("Brugge", "8000"),
+    ("Gent", "9000"),
+]
+
+SUPPLIERS = [
+    ("Vinyl Haven", "contact@vinylhaven.com"),
+    ("EuroSound Distribution", "sales@eurosound.eu"),
+    ("Disc & Co", "info@discandco.com"),
+    ("Retro Records Supply", "hello@retrorecords.com"),
+    ("Northern Press Co", "orders@northernpress.com"),
+    ("Global Music Supply", "contact@globalmusic.com"),
+]
+
+ARTISTS = [
+    {
+        "name": "David Bowie",
+        "image": "david_bowie.jpg",
+        "description": "English singer-songwriter and a leading figure in popular music for five decades.",
+        "albums": [
+            {
+                "name": "Blackstar",
+                "image": "blackstar.jpg",
+                "media_type": CD,
+                "price": Decimal("21.99"),
+                "description": "Released 8 January 2016. Bowie's final album, issued two days before his death and praised as a haunting farewell.",
+            },
+            {
+                "name": '"Heroes"',
+                "image": "heroes.jpg",
+                "media_type": VINYL,
+                "price": Decimal("28.99"),
+                "description": "Released 14 October 1977. The centerpiece of Bowie's Berlin Trilogy, recorded with Brian Eno.",
+            },
+            {
+                "name": "The Rise and Fall of Ziggy Stardust and the Spiders from Mars",
+                "image": "ziggy_stardust.jpg",
+                "media_type": VINYL,
+                "price": Decimal("31.99"),
+                "description": "Released 16 June 1972. A concept album that introduced Bowie's Ziggy Stardust persona.",
+            },
+        ],
+    },
+    {
+        "name": "Nirvana",
+        "image": "nirvana.jpg",
+        "description": "American grunge band that brought alternative rock into the mainstream.",
+        "albums": [
+            {
+                "name": "Nevermind",
+                "image": "nevermind.jpg",
+                "media_type": VINYL,
+                "price": Decimal("26.99"),
+                "description": "Released 24 September 1991. The album that broke grunge worldwide.",
+            },
+            {
+                "name": "In Utero",
+                "image": "in_utero.jpg",
+                "media_type": CD,
+                "price": Decimal("18.99"),
+                "description": "Released 21 September 1993. Nirvana's raw, uncompromising final studio album.",
+            },
+        ],
+    },
+    {
+        "name": "The Beatles",
+        "image": "beatles.jpg",
+        "description": "English rock band widely regarded as the most influential act of the 1960s.",
+        "albums": [
+            {
+                "name": "Abbey Road",
+                "image": "abbey_road.jpg",
+                "media_type": VINYL,
+                "price": Decimal("32.99"),
+                "description": "Released 26 September 1969. The band's penultimate album, famous for its side-two medley.",
+            },
+            {
+                "name": "Revolver",
+                "image": "revolver.jpg",
+                "media_type": CD,
+                "price": Decimal("22.99"),
+                "description": "Released 5 August 1966. A studio landmark that broadened the band's sonic range.",
+            },
+        ],
+    },
+    {
+        "name": "R.E.M.",
+        "image": "rem.jpg",
+        "description": "American alternative rock band from Athens, Georgia.",
+        "albums": [
+            {
+                "name": "Automatic for the People",
+                "image": "automatic_for_the_people.jpg",
+                "media_type": CD,
+                "price": Decimal("19.99"),
+                "description": "Released 5 October 1992. A somber, reflective career highlight.",
+            },
+            {
+                "name": "Document",
+                "image": "document.jpg",
+                "media_type": VINYL,
+                "price": Decimal("25.99"),
+                "description": "Released 31 August 1987. The band's commercial breakthrough.",
+            },
+            {
+                "name": "Monster",
+                "image": "monster.jpg",
+                "media_type": CD,
+                "price": Decimal("18.99"),
+                "description": "Released 27 September 1994. A loud, glam-influenced departure.",
+            },
+        ],
+    },
+    {
+        "name": "Pink Floyd",
+        "image": "pink_floyd.jpg",
+        "description": "English progressive rock band known for concept albums and elaborate live shows.",
+        "albums": [
+            {
+                "name": "The Wall",
+                "image": "wall.jpg",
+                "media_type": VINYL,
+                "price": Decimal("36.99"),
+                "description": "Released 30 November 1979. A sprawling rock opera and double album.",
+            },
+            {
+                "name": "Wish You Were Here",
+                "image": "wish_you_were_here.jpg",
+                "media_type": VINYL,
+                "price": Decimal("32.99"),
+                "description": "Released 12 September 1975. A tribute to former member Syd Barrett.",
+            },
+        ],
+    },
+    {
+        "name": "Metallica",
+        "image": "metallica.jpg",
+        "description": "American heavy metal band and one of the founders of thrash metal.",
+        "albums": [
+            {
+                "name": "Master of Puppets",
+                "image": "master_of_puppets.jpg",
+                "media_type": VINYL,
+                "price": Decimal("29.99"),
+                "description": "Released 3 March 1986. A defining thrash metal record and the band's first gold album.",
+            },
+            {
+                "name": "Ride the Lightning",
+                "image": "ride_the_lightning.jpg",
+                "media_type": CD,
+                "price": Decimal("19.99"),
+                "description": "Released 27 July 1984. The band's ambitious and acclaimed second album.",
+            },
+        ],
+    },
+    {
+        "name": "Ghost",
+        "image": "ghost.jpg",
+        "description": "Swedish rock band known for theatrical performances and melodic hard rock.",
+        "albums": [
+            {
+                "name": "Meliora",
+                "image": "meliora.jpg",
+                "media_type": CD,
+                "price": Decimal("20.99"),
+                "description": "Released 21 August 2015. Won a Grammy for the single 'Cirice'.",
+            },
+            {
+                "name": "Prequelle",
+                "image": "prequelle.jpg",
+                "media_type": VINYL,
+                "price": Decimal("28.99"),
+                "description": "Released 1 June 2018. A loose concept album themed around the Black Death.",
+            },
+            {
+                "name": "Impera",
+                "image": "impera.jpg",
+                "media_type": CD,
+                "price": Decimal("23.99"),
+                "description": "Released 11 March 2022. The band's chart-topping fifth studio album.",
+            },
+        ],
+    },
+    {
+        "name": "Radiohead",
+        "image": "radiohead.jpg",
+        "description": "English rock band acclaimed for their experimental, genre-defying approach.",
+        "albums": [
+            {
+                "name": "OK Computer",
+                "image": "ok_computer.jpg",
+                "media_type": CD,
+                "price": Decimal("24.99"),
+                "description": "Released 16 June 1997. A landmark album exploring modern alienation.",
+            },
+            {
+                "name": "Kid A",
+                "image": "kid_a.jpg",
+                "media_type": VINYL,
+                "price": Decimal("29.99"),
+                "description": "Released 2 October 2000. A bold electronic reinvention of the band's sound.",
+            },
+        ],
+    },
+    {
+        "name": "The Rolling Stones",
+        "image": "rolling_stones.jpg",
+        "description": "English rock band and one of the most enduring acts in rock history.",
+        "albums": [
+            {
+                "name": "Let It Bleed",
+                "image": "let_it_bleed.jpg",
+                "media_type": VINYL,
+                "price": Decimal("30.99"),
+                "description": "Released 28 November 1969. A cornerstone of the band's golden era.",
+            },
+            {
+                "name": "Sticky Fingers",
+                "image": "sticky_fingers.jpg",
+                "media_type": VINYL,
+                "price": Decimal("33.99"),
+                "description": "Released 23 April 1971. The first album released on the band's own label.",
+            },
+        ],
+    },
+    {
+        "name": "System of a Down",
+        "image": "system_of_a_down.jpg",
+        "description": "American-Armenian metal band known for eclectic, politically charged music.",
+        "albums": [
+            {
+                "name": "Toxicity",
+                "image": "toxicity.jpg",
+                "media_type": CD,
+                "price": Decimal("21.99"),
+                "description": "Released 4 September 2001. The band's chart-topping breakthrough.",
+            },
+            {
+                "name": "Mezmerize",
+                "image": "mezmerize.jpg",
+                "media_type": CD,
+                "price": Decimal("20.99"),
+                "description": "Released 17 May 2005. The first half of a two-part release.",
+            },
+        ],
+    },
+    {
+        "name": "The War on Drugs",
+        "image": "war_on_drugs.jpg",
+        "description": "American rock band blending heartland rock with atmospheric production.",
+        "albums": [
+            {
+                "name": "Lost in the Dream",
+                "image": "lost_in_the_dream.jpg",
+                "media_type": VINYL,
+                "price": Decimal("27.99"),
+                "description": "Released 18 March 2014. The album that earned the band wide critical acclaim.",
+            },
+            {
+                "name": "A Deeper Understanding",
+                "image": "deeper_understanding.jpg",
+                "media_type": CD,
+                "price": Decimal("22.99"),
+                "description": "Released 25 August 2017. Won the Grammy for Best Rock Album.",
+            },
+        ],
+    },
+    {
+        "name": "Low Roar",
+        "image": "low_roar.jpg",
+        "description": "Atmospheric indie and electronic project founded by Ryan Karazija.",
+        "albums": [
+            {
+                "name": "Once in a Long, Long While...",
+                "image": "once_in_a_long_long_while.jpg",
+                "media_type": VINYL,
+                "price": Decimal("26.99"),
+                "description": "Released 14 April 2017. Widely noted for its use in the game Death Stranding.",
+            },
+        ],
+    },
+    {
+        "name": "Bruce Springsteen",
+        "image": "bruce_springsteen.jpg",
+        "description": "American rock singer-songwriter known as 'The Boss'.",
+        "albums": [
+            {
+                "name": "Born to Run",
+                "image": "born_to_run.jpg",
+                "media_type": VINYL,
+                "price": Decimal("28.99"),
+                "description": "Released 25 August 1975. The breakthrough record that made Springsteen a star.",
+            },
+            {
+                "name": "Nebraska",
+                "image": "nebraska.jpg",
+                "media_type": CD,
+                "price": Decimal("19.99"),
+                "description": "Released 30 September 1982. A stark, home-recorded acoustic album.",
+            },
+        ],
+    },
+    {
+        "name": "The Clash",
+        "image": "clash.jpg",
+        "description": "English punk rock band formed in London in 1976.",
+        "albums": [
+            {
+                "name": "London Calling",
+                "image": "london_calling.jpg",
+                "media_type": VINYL,
+                "price": Decimal("31.99"),
+                "description": "Released 14 December 1979. A genre-spanning double album and punk touchstone.",
+            },
+            {
+                "name": "Combat Rock",
+                "image": "combat_rock.jpg",
+                "media_type": CD,
+                "price": Decimal("20.99"),
+                "description": "Released 14 May 1982. The band's most commercially successful album.",
+            },
+        ],
+    },
+    {
+        "name": "Hällas",
+        "image": "hallas.jpg",
+        "description": "Swedish progressive rock band with an adventurous, retro-leaning sound.",
+        "albums": [
+            {
+                "name": "Excerpts from a Future Past",
+                "image": "excerpts_from_a_future_past.jpg",
+                "media_type": VINYL,
+                "price": Decimal("27.99"),
+                "description": "Released 17 November 2017. The band's debut full-length concept album.",
+            },
+        ],
+    },
+]
+
+ORDER_STATUS_WEIGHTS = {
+    OrderStatus.DELIVERED: 5,
+    OrderStatus.SHIPPED: 3,
+    OrderStatus.PAID: 3,
+    OrderStatus.PENDING: 2,
+    OrderStatus.CANCELLED: 1,
+}
+INVOICED_STATUSES = {OrderStatus.PAID, OrderStatus.SHIPPED, OrderStatus.DELIVERED}
+
 
 def seed():
     session = SessionLocal()
 
     try:
-        print("🌱 Starting seed...")
+        hashed_password = hash_password("seed-placeholder")
 
-        # =========================================================
-        # 👤 USERS
-        # =========================================================
         users = [
             User(
-                email=f"user{i}@mail.com",
-                password_hash="hashed_password",
-                first_name=f"User{i}",
-                last_name="Test",
+                email=f"{first}.{last}@example.com".lower(),
+                hashed_password=hashed_password,
+                first_name=first,
+                last_name=last,
             )
-            for i in range(1, 16)
+            for first, last in USERS
         ]
-
         session.add_all(users)
         session.flush()
 
-        # =========================================================
-        # 🏠 ADDRESSES
-        # =========================================================
-        cities = ["Bruxelles", "Liège", "Namur", "Charleroi", "Mons"]
-
         addresses = []
-        for i, user in enumerate(users):
+        for user in users:
             for _ in range(random.randint(1, 2)):
+                city, postal_code = random.choice(CITIES)
                 addresses.append(
                     Address(
                         user_id=user.id,
                         street=f"{random.randint(1, 200)} Rue de la Musique",
-                        city=random.choice(cities),
-                        postal_code=str(random.randint(1000, 9999)),
+                        city=city,
+                        postal_code=postal_code,
                         country_code="BE",
                     )
                 )
-
         session.add_all(addresses)
         session.flush()
 
-        # =========================================================
-        # 🎸 ARTISTS (16)
-        # =========================================================
-        artists = [
-            Artist(name="Metallica", description="Heavy metal legends"),
-            Artist(name="Nirvana", description="Grunge pioneers"),
-            Artist(name="David Bowie", description="Rock icon and musical innovator"),
-            Artist(name="Pink Floyd", description="Progressive rock icons"),
-            Artist(name="Daft Punk", description="French electronic duo"),
-            Artist(name="Radiohead", description="Alternative rock band"),
-            Artist(name="The Beatles", description="Classic rock band"),
-            Artist(name="Led Zeppelin", description="Hard rock pioneers"),
-            Artist(name="Queen", description="British rock band"),
-            Artist(name="Kendrick Lamar", description="Hip-hop artist"),
-            Artist(name="Drake", description="Rap superstar"),
-            Artist(name="The Weeknd", description="R&B / pop artist"),
-            Artist(name="Eminem", description="Rap legend"),
-            Artist(name="Miles Davis", description="Jazz trumpeter"),
-            Artist(name="Hans Zimmer", description="Film composer"),
-            Artist(name="Arctic Monkeys", description="Indie rock band"),
-        ]
+        addresses_by_user: dict[int, list[Address]] = {}
+        for address in addresses:
+            addresses_by_user.setdefault(address.user_id, []).append(address)
 
-        session.add_all(artists)
-        session.flush()
-
-        # =========================================================
-        # 💿 ALBUMS (23)
-        # =========================================================
-        albums = [
-            Album(name="Master of Puppets", media_type=MediaType.VINYL, price=Decimal("29.99"), stock=12),
-            Album(name="Ride the Lightning", media_type=MediaType.VINYL, price=Decimal("27.99"), stock=8),
-
-            Album(name="Nevermind", media_type=MediaType.CD, price=Decimal("19.99"), stock=20),
-            Album(name="In Utero", media_type=MediaType.CD, price=Decimal("18.99"), stock=15),
-
-            Album(name="Heroes", media_type=MediaType.VINYL, price=Decimal("28.99"), stock=9),
-            Album(name="The Rise and Fall of Ziggy Stardust and the Spiders from Mars", media_type=MediaType.VINYL, price=Decimal("32.99"), stock=7),
-
-            Album(name="The Dark Side of the Moon", media_type=MediaType.VINYL, price=Decimal("34.99"), stock=10),
-            Album(name="Wish You Were Here", media_type=MediaType.VINYL, price=Decimal("32.99"), stock=9),
-
-            Album(name="Random Access Memories", media_type=MediaType.VINYL, price=Decimal("35.99"), stock=6),
-            Album(name="Discovery", media_type=MediaType.CD, price=Decimal("22.99"), stock=11),
-
-            Album(name="OK Computer", media_type=MediaType.CD, price=Decimal("24.99"), stock=13),
-            Album(name="Kid A", media_type=MediaType.VINYL, price=Decimal("29.99"), stock=7),
-
-            Album(name="Abbey Road", media_type=MediaType.VINYL, price=Decimal("31.99"), stock=14),
-            Album(name="The Beatles (White Album)", media_type=MediaType.VINYL, price=Decimal("33.99"), stock=5),
-
-            Album(name="Led Zeppelin IV", media_type=MediaType.VINYL, price=Decimal("30.99"), stock=10),
-
-            Album(name="A Night at the Opera", media_type=MediaType.VINYL, price=Decimal("28.99"), stock=12),
-
-            Album(name="DAMN.", media_type=MediaType.CD, price=Decimal("21.99"), stock=18),
-            Album(name="good kid, m.A.A.d city", media_type=MediaType.CD, price=Decimal("23.99"), stock=10),
-
-            Album(name="Scorpion", media_type=MediaType.CD, price=Decimal("19.99"), stock=25),
-
-            Album(name="After Hours", media_type=MediaType.CD, price=Decimal("26.99"), stock=17),
-
-            Album(name="The Eminem Show", media_type=MediaType.CD, price=Decimal("22.99"), stock=13),
-
-            Album(name="Kind of Blue", media_type=MediaType.VINYL, price=Decimal("27.99"), stock=8),
-
-            Album(name="Interstellar OST", media_type=MediaType.VINYL, price=Decimal("29.99"), stock=6),
-        ]
-
+        albums: list[Album] = []
+        for entry in ARTISTS:
+            artist = Artist(
+                name=entry["name"],
+                description=entry["description"],
+                picture_url=f"/static/images/artists/{entry['image']}",
+            )
+            for album_data in entry["albums"]:
+                album = Album(
+                    name=album_data["name"],
+                    description=album_data["description"],
+                    cover_url=f"/static/images/albums/{album_data['image']}",
+                    media_type=album_data["media_type"],
+                    price=album_data["price"],
+                    stock=random.randint(5, 25),
+                )
+                album.artists.append(artist)
+                albums.append(album)
+            session.add(artist)
         session.add_all(albums)
         session.flush()
 
-        # =========================================================
-        # 🔗 ALBUM ↔ ARTISTS
-        # =========================================================
-        mapping = {
-            "Metallica": ["Master of Puppets", "Ride the Lightning"],
-            "Nirvana": ["Nevermind", "In Utero"],
-            "David Bowie": ["Heroes", "The Rise and Fall of Ziggy Stardust and the Spiders from Mars"],
-            "Pink Floyd": ["The Dark Side of the Moon", "Wish You Were Here"],
-            "Daft Punk": ["Random Access Memories", "Discovery"],
-            "Radiohead": ["OK Computer", "Kid A"],
-            "The Beatles": ["Abbey Road", "The Beatles (White Album)"],
-            "Led Zeppelin": ["Led Zeppelin IV"],
-            "Queen": ["A Night at the Opera"],
-            "Kendrick Lamar": ["DAMN.", "good kid, m.A.A.d city"],
-            "Drake": ["Scorpion"],
-            "The Weeknd": ["After Hours"],
-            "Eminem": ["The Eminem Show"],
-            "Miles Davis": ["Kind of Blue"],
-            "Hans Zimmer": ["Interstellar OST"],
-        }
-
-        for artist in artists:
-            if artist.name in mapping:
-                for album in albums:
-                    if album.name in mapping[artist.name]:
-                        album.artists.append(artist)
-
-        # =========================================================
-        # 🏬 SUPPLIERS (10)
-        # =========================================================
-        suppliers = [
-            Supplier(name="Vinyl Haven", contact_email="contact@vinylhaven.com"),
-            Supplier(name="Music World EU", contact_email="sales@musicworld.eu"),
-            Supplier(name="Disc Supply", contact_email="info@discsupply.com"),
-            Supplier(name="AudioStock", contact_email="support@audiostock.com"),
-            Supplier(name="EuroMusic Distribution", contact_email="sales@euromusic.com"),
-            Supplier(name="Beat Supply Co", contact_email="contact@beatsupply.com"),
-            Supplier(name="Retro Records", contact_email="hello@retrorecords.com"),
-            Supplier(name="Global Sound Supply", contact_email="info@globalsound.com"),
-            Supplier(name="CD Universe EU", contact_email="eu@cdu.com"),
-            Supplier(name="Pure Vinyl Traders", contact_email="contact@purevinyl.com"),
-        ]
-
+        suppliers = [Supplier(name=name, contact_email=email) for name, email in SUPPLIERS]
         session.add_all(suppliers)
         session.flush()
 
-        # =========================================================
-        # 📦 SUPPLIER OFFERS
-        # =========================================================
         offers = []
         for album in albums:
-            supplier = random.choice(suppliers)
-            offers.append(
-                SupplierOffer(
-                    supplier_id=supplier.id,
-                    album_id=album.id,
-                    unit_price=album.price * Decimal("0.6"),
+            for supplier in random.sample(suppliers, random.randint(1, 2)):
+                offers.append(
+                    SupplierOffer(
+                        supplier_id=supplier.id,
+                        album_id=album.id,
+                        unit_price=(album.price * Decimal("0.55")).quantize(Decimal("0.01")),
+                    )
                 )
-            )
-
         session.add_all(offers)
 
-        # =========================================================
-        # 🛒 ORDERS (150–200)
-        # =========================================================
-        orders = []
-        order_items = []
-        invoices = []
+        status_pool = [
+            status for status, weight in ORDER_STATUS_WEIGHTS.items() for _ in range(weight)
+        ]
 
-        for i in range(180):
+        orders = []
+        for index in range(50):
             user = random.choice(users)
-            addresses_by_user = {}
-            
-            for a in addresses:
-                addresses_by_user.setdefault(a.user_id, []).append(a)
-                
             address = random.choice(addresses_by_user[user.id])
+            status = random.choice(status_pool)
+
+            total_price = Decimal("0.00")
+            order_items = []
+            for album in random.sample(albums, random.randint(1, 4)):
+                quantity = random.randint(1, 3)
+                order_items.append(
+                    OrderItem(album_id=album.id, quantity=quantity, unit_price=album.price)
+                )
+                total_price += album.price * quantity
 
             order = Order(
                 user_id=user.id,
                 address_id=address.id,
-                status=random.choice(list(OrderStatus)),
-                total_price=Decimal("1.00"),
+                status=status,
+                total_price=total_price,
             )
-
+            order.order_items = order_items
             session.add(order)
-            session.flush()
+            orders.append((index, order, status, total_price))
+        session.flush()
 
-            total = Decimal("0.00")
-
-            for album in random.sample(albums, random.randint(1, 4)):
-                qty = random.randint(1, 2)
-
-                order_items.append(
-                    OrderItem(
-                        order_id=order.id,
-                        album_id=album.id,
-                        quantity=qty,
-                        unit_price=album.price,
-                    )
-                )
-
-                total += album.price * qty
-
-            order.total_price = total
-
-            if order.status != OrderStatus.PENDING:
-                invoices.append(
-                    Invoice(
-                        order_id=order.id,
-                        invoice_number=f"INV-2026-{i:05d}",
-                        total_amount=total,
-                    )
-                )
-
-            orders.append(order)
-
-        session.add_all(order_items)
+        invoices = [
+            Invoice(
+                order_id=order.id,
+                invoice_number=f"INV-2026-{index:04d}",
+                total_amount=total_price,
+            )
+            for index, order, status, total_price in orders
+            if status in INVOICED_STATUSES
+        ]
         session.add_all(invoices)
 
-        # =========================================================
-        # 🚚 SUPPLIER ORDERS (30–40)
-        # =========================================================
         supplier_orders = []
-        supplier_items = []
-
-        for i in range(35):
+        for _ in range(15):
             supplier = random.choice(suppliers)
 
-            so = SupplierOrder(
-                supplier_id=supplier.id,
-                status=random.choice(list(RestockStatus)),
-                total_price=Decimal("1.00"),
-            )
-
-            session.add(so)
-            session.flush()
-
-            total = Decimal("0.00")
-
+            total_price = Decimal("0.00")
+            supplier_items = []
             for album in random.sample(albums, random.randint(1, 3)):
-                qty = random.randint(2, 8)
-                price = album.price * Decimal("0.5")
-
+                quantity = random.randint(5, 20)
+                unit_price = (album.price * Decimal("0.5")).quantize(Decimal("0.01"))
                 supplier_items.append(
                     SupplierOrderItem(
-                        supplier_order_id=so.id,
-                        album_id=album.id,
-                        quantity=qty,
-                        unit_price=price,
+                        album_id=album.id, quantity=quantity, unit_price=unit_price
                     )
                 )
+                total_price += unit_price * quantity
 
-                total += price * qty
+            supplier_order = SupplierOrder(
+                supplier_id=supplier.id,
+                status=random.choice(list(RestockStatus)),
+                total_price=total_price,
+            )
+            supplier_order.supplier_order_items = supplier_items
+            session.add(supplier_order)
+            supplier_orders.append(supplier_order)
 
-            so.total_price = total
-
-        session.add_all(supplier_items)
-
-        # =========================================================
-        # COMMIT
-        # =========================================================
         session.commit()
-        print("✅ Seed completed successfully")
+        print(
+            f"Seed complete: {len(users)} users, {len(albums)} albums, "
+            f"{len(orders)} orders, {len(supplier_orders)} supplier orders."
+        )
 
-    except Exception as e:
+    except Exception as exc:
         session.rollback()
-        print("❌ Seed failed:", e)
+        print(f"Seed failed: {exc}")
+        raise
 
     finally:
         session.close()
