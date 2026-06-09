@@ -4,6 +4,8 @@ from typing import Any
 
 from pydantic import ValidationError
 
+from playitloud.core.constants import DEFAULT_IMAGE_URL
+
 
 from playitloud.models.album import MediaType
 from playitloud.repositories.album_repository import AlbumRepository
@@ -44,6 +46,8 @@ def test_create_album_with_artists(db_session):
 
     assert len(result.artists) == 1
     assert result.artists[0].id == artist.id
+    # no cover set -> falls back to the default image
+    assert result.cover_url == DEFAULT_IMAGE_URL
 
     # price beyond 2 decimal places is rejected, not silently rounded to 10.00
     with pytest.raises(ValidationError):

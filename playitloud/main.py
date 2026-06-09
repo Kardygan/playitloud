@@ -1,5 +1,8 @@
+from pathlib import Path
+
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 
 from playitloud.routers import (
     addresses,
@@ -13,6 +16,9 @@ from playitloud.routers import (
 )
 
 app = FastAPI(title="Playitloud API")
+
+STATIC_DIR = Path(__file__).resolve().parent.parent / "static"
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 app.include_router(users.router)
 app.include_router(addresses.router)

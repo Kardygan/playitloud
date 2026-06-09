@@ -1,5 +1,6 @@
 import pytest
 
+from playitloud.core.constants import DEFAULT_IMAGE_URL
 from playitloud.repositories.artist_repository import ArtistRepository
 from playitloud.schemas.artist import ArtistCreate, ArtistUpdate
 from playitloud.services.artist_service import ArtistService
@@ -16,6 +17,8 @@ def test_create_artist(db_session):
 
     assert result.id is not None
     assert result.name == "Pink Floyd"
+    # no picture set -> falls back to the default image
+    assert result.picture_url == DEFAULT_IMAGE_URL
 
 
 def test_update_artist(db_session):

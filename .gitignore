@@ -218,3 +218,9 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Album/artist media: keep folder structure + default image, ignore copyrighted art
+/static/images/artists/*
+/static/images/albums/*
+!/static/images/artists/.gitkeep
+!/static/images/albums/.gitkeep
